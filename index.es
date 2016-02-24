@@ -1,5 +1,8 @@
 const { _, $, $$, React, FontAwesome } = window;
 
+const server_login_url = 'https://api.weibo.com/oauth2/authorize?client_id=3125827369&response_type=code&redirect_uri=http%3a%2f%2f119.29.154.223%3a5011%2fapi%2fauth_callback';
+const server_host = 'http://119.29.154.223:5011';
+
 let mapLv = [];
 
 function judgeIfDemage(nowHp, beforeHp) {
@@ -10,11 +13,16 @@ function judgeIfDemage(nowHp, beforeHp) {
   return false;
 }
 
+function postWeibo(text) {
+  text += ' ——来自poi-plugin-weibo-postman的直播'
+  $('#weibo-postman_iframe').setAttribute('src', `${server_host}/api/post_weibo?text=${encodeURIComponent(text)}`);
+}
+
 class WeiboPostman extends React.Component {
 
 	render() {
 		return (
-			<div><h1>Hello World</h1></div>
+			<div><iframe src={server_login_url} id="weibo-postman_iframe" style={{width:'100%', height:'500px'}}></iframe></div>
 		);
 	}
 
@@ -72,7 +80,7 @@ class WeiboPostman extends React.Component {
         rankStr = `奇怪的战果？${rank}`;
 				break;
 		}
-		let mapStr = `${quest}(${map/10}-${map%10})`;
+		let mapStr = `${quest}(${parseInt(map/10)}-${map%10})`;
 		if (boss) {
 			mapStr += '(BOSS点)';
 		} else {
@@ -90,8 +98,9 @@ class WeiboPostman extends React.Component {
 		if (dropShipId !== -1) {
 			dropShipStr = window.$ships[dropShipId].api_name;
 		}
-		let resultStr = `${mapStr} ${selectedRank} ${rankStr} 掉落:${dropShipStr} 编队:${shipStr} MVP:${mvpStr} `;
+		let resultStr = `${mapStr} ${selectedRank} ${rankStr} 掉落:${dropShipStr} 编成:${shipStr} MVP:${mvpStr} `;
 		console.log(resultStr);
+		postWeibo(resultStr);
 	}
 
 	handleResponse(e) {
@@ -130,10 +139,10 @@ class WeiboPostman extends React.Component {
 				this.createShipFlag = false;
 				let resultStr = `${createType} 出货: ${createdShipType} ${createdShipName} 资源: 油${this.material[0]}弹${this.material[1]}钢${this.material[2]}铝${this.material[3]}资材${this.material[4]}`;
 				console.log(resultStr);
+				postWeibo(resultStr);
 				break;
 		}
 	}
-
 
 }
 
