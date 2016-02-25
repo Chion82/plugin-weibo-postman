@@ -8,5 +8,17 @@
   },
   "author": "Chion Tang <me@chionlab.moe>",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chion82/plugin-weibo-postman.git"
+  },
+  "keywords": [
+    "poi"
+  ],
+  "bugs": {
+    "url": "https://github.com/Chion82/plugin-weibo-postman/issues"
+  },
+  "homepage": "https://github.com/Chion82/plugin-weibo-postman#readme"
 }
