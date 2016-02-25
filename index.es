@@ -1,10 +1,21 @@
 import config from './config.es';
 import fs from 'fs';
+import i18n_2 from 'i18n-2';
+import path from 'path';
 
 const { _, $, $$, React, FontAwesome, ReactBootstrap } = window;
 const {Button, Label, Input} = ReactBootstrap;
-
 const {server_login_url, server_host} = config;
+
+window.i18n.weiboPostman = new i18n_2({
+    locales:['en-US', 'zh-CN', 'zh-TW'],
+    defaultLocale: 'en-US',
+    directory: path.join(__dirname, 'i18n'),
+    extension: '.json',
+    devMode: false
+});
+window.i18n.weiboPostman.setLocale(window.language);
+const __ = window.i18n.weiboPostman.__.bind(i18n.weiboPostman);
 
 let mapLv = [];
 
@@ -27,10 +38,10 @@ class WeiboPostman extends React.Component {
 
 	render() {
 		return (
-			<div style={{padding: '10px'}}>
-                微博直播可将出击战绩和建造出货实时在你的微博上直播。<br />
+            <div style={{padding: '10px'}}>
+                {__('pluginDescriptionUI')}<br />
                 <span id="weibo-postman_hint">
-                    请先登录你的微博账号。
+                    {__('hintLoginWeibo')}
                 </span>
                 <iframe src={server_login_url} id="weibo-postman_iframe" style={{width:'100%', height:'300px'}}
                     onLoad={()=>{
@@ -50,19 +61,19 @@ class WeiboPostman extends React.Component {
                     }}
                 ></iframe>
                 <div id="weibo-postman_config_panel">
-                    <Input type="checkbox" id="weibo-postman_post_battle_result" label="直播出击战绩" defaultChecked={this.state.postBattleResult}
+                    <Input type="checkbox" id="weibo-postman_post_battle_result" label={__('postBattleResult')} defaultChecked={this.state.postBattleResult}
                         onClick={()=>{
                             if (!$('#weibo-postman_post_battle_result').checked) {
                                 $('#weibo-postman_post_midway_result').checked = false;
                             }
                         }} />
-                    <Input type="checkbox" id="weibo-postman_post_midway_result" label="直播道中战绩（如不勾选，只直播BOSS点的结果）" defaultChecked={this.state.postMidwayResult} />
-                    <Input type="checkbox" id="weibo-postman_post_construct_result" label="直播建造出货" defaultChecked={this.state.postConstructResult} />
-                    微博前缀文本：
+                    <Input type="checkbox" id="weibo-postman_post_midway_result" label={__('postMidwayResult')} defaultChecked={this.state.postMidwayResult} />
+                    <Input type="checkbox" id="weibo-postman_post_construct_result" label={__('postConstructResult')} defaultChecked={this.state.postConstructResult} />
+                    {__('weiboTextPrefix')}
                     <Input type="text" id="weibo-postman_text_prefix" defaultValue={this.state.textPrefix} />
-                    微博后缀文本：
+                    {__('weiboTextAfter')}
                     <Input type="text" id="weibo-postman_text_after" defaultValue={this.state.textAfter} />
-                    <Button bsStyle="primary" onClick={this.saveConfig.bind(this)}>保存</Button>
+                    <Button bsStyle="primary" onClick={this.saveConfig.bind(this)}>{__('save')}</Button>
                 </div>
             </div>
 		);
@@ -91,7 +102,7 @@ class WeiboPostman extends React.Component {
             postMidwayResult : false,
             postConstructResult : true,
             textPrefix : '',
-            textAfter : ' --发送自poi-plugin-weibo-postman的微博直播'
+            textAfter : __('defaultTextAfter')
         };
         try {
             fs.accessSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', fs.R_OK);
@@ -113,7 +124,7 @@ class WeiboPostman extends React.Component {
         }
         fs.writeFileSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', JSON.stringify(configObject));
         this.setState(configObject);
-        window.success('保存成功！');
+        window.success(__('saveSuccess'));
     }
 
     postWeibo(text) {
@@ -123,7 +134,7 @@ class WeiboPostman extends React.Component {
             text = text.substr(0, 137) + '...';
         }
         $('#weibo-postman_iframe').setAttribute('src', `${server_host}/api/post_weibo?text=${encodeURIComponent(text)}`);
-        window.success('发送微博：' + text);
+        window.success(__('sentWeibo') + text);
     }
 
 	handleBattleResultResponse(e) {
@@ -135,13 +146,13 @@ class WeiboPostman extends React.Component {
 		let selectedRank = "";
 		switch (mapLv[map]) {
             case 1:
-                selectedRank = "难度:丙";
+                selectedRank = __('eventRankEasy');
 				break;
             case 2:
-                selectedRank = "难度:乙";
+                selectedRank = __('eventRankMedium');
 				break;
             case 3:
-                selectedRank = "难度:甲";
+                selectedRank = __('eventRankHard');
 				break;
 		}
 		let beforeHp = deckShipId.map((id) => {
@@ -154,34 +165,34 @@ class WeiboPostman extends React.Component {
 		switch (rank) {
             case 'S':
                 if (this.judgeIfDemage(deckHp, beforeHp))
-                    rankStr = '勝利S';
+                    rankStr = __('rankS');
                 else
-				 	rankStr ='完全勝利!!!S';
+				 	rankStr = __('rankSS');
 			    break;
             case 'A':
-                rankStr = '勝利A';
+                rankStr = __('rankA');
 				break;
             case 'B':
-                rankStr = '戦術的勝利B';
+                rankStr = __('rankB');
 				break;
             case 'C':
-                rankStr = '戦術的敗北C';
+                rankStr = __('rankC');
 				break;
             case 'D':
-                rankStr = '敗北D';
+                rankStr = __('rankD');
 				break;
             case 'E':
-                rankStr = '敗北E';
+                rankStr = __('rankE');
 				break;
             default:
-                rankStr = `奇怪的战果？${rank}`;
+                rankStr = `${__('rankUnknown')}${rank}`;
 				break;
 		}
-		let mapStr = `${quest}(${parseInt(map/10)}-${map%10})`;
+		let mapStr = `${quest}(${parseInt(map/10)>30?'E':parseInt(map/10)}-${map%10})`;
 		if (boss) {
-			mapStr += '(BOSS点)';
+			mapStr += __('bossPoint');
 		} else {
-			mapStr += '(道中)';
+			mapStr += __('midwayPoint');
             if (!this.state.postMidwayResult) {
                 return;
             }
@@ -194,11 +205,11 @@ class WeiboPostman extends React.Component {
 		}
 		let shipStr = shipNameArray.join(', ')
 		let mvpStr = window._ships[deckShipId[mvp[0]]].api_name;
-		let dropShipStr = '无';
+		let dropShipStr = __('none');
 		if (dropShipId !== -1) {
 			dropShipStr = window.$ships[dropShipId].api_name;
 		}
-		let resultStr = `${mapStr} ${selectedRank} ${rankStr} 掉落:${dropShipStr} 编成:${shipStr} MVP:${mvpStr} `;
+		let resultStr = `${mapStr} ${selectedRank} ${rankStr} ${__('drop')}${dropShipStr} ${__('fleet')}${shipStr} MVP:${mvpStr} `;
 		this.postWeibo(resultStr);
 	}
 
@@ -233,14 +244,14 @@ class WeiboPostman extends React.Component {
 					break;
 				}
 				let apiData = body[this.state.kdockId-1];
-				let createType = '普通建造';
+				let createType = __('normalConstruct');
 				if (this.state.largeFlag) {
-					createType = '大型建造';
+					createType = __('largeConstruct');
 				}
 				let createdShipName = window.$ships[apiData.api_created_ship_id].api_name;
 				let createdShipType = window.$shipTypes[window.$ships[apiData.api_created_ship_id].api_stype].api_name;
 				this.setState({createShipFlag: false});
-				let resultStr = `${createType} 出货: ${createdShipType} ${createdShipName} 资源: 油${this.state.material[0]}弹${this.state.material[1]}钢${this.state.material[2]}铝${this.state.material[3]}资材${this.state.material[4]}`;
+				let resultStr = `${createType} ${__('createdResult')} ${createdShipType} ${createdShipName} ${__('material')} ${__('fuel')}${this.state.material[0]}${__('ammor')}${this.state.material[1]}${__('steel')}${this.state.material[2]}${__('aluminum')}${this.state.material[3]}${__('merchandise')}${this.state.material[4]}`;
 				this.postWeibo(resultStr);
 				break;
 		}
@@ -250,12 +261,14 @@ class WeiboPostman extends React.Component {
 
 let pluginInfo = {
     name : 'weibo-postman',
-	displayName : 'Weibo Postman',
-	priority : 10,
-	show : true,
-	author : 'Chion Tang',
-	version : '1.0.0',
-	reactClass : WeiboPostman
+    displayName : (<span><FontAwesome key={0} name='weibo' />{__('pluginDisplayName')}</span>),
+    description : __('pluginDescription'),
+    link : 'https://github.com/Chion82/plugin-weibo-postman',
+    priority : 10,
+    show : true,
+    author : 'Chion Tang',
+    version : '1.0.0',
+    reactClass : WeiboPostman
 }
 
 export default pluginInfo;
