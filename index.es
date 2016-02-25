@@ -261,7 +261,7 @@ class WeiboPostman extends React.Component {
 
 let pluginInfo = {
     name : 'weibo-postman',
-    displayName : (<span><FontAwesome key={0} name='weibo' />{__('pluginDisplayName')}</span>),
+    displayName : (<span><FontAwesome key={0} name='weibo' /> {__('pluginDisplayName')}</span>),
     description : __('pluginDescription'),
     link : 'https://github.com/Chion82/plugin-weibo-postman',
     priority : 10,
