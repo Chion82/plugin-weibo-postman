@@ -267,7 +267,7 @@ let pluginInfo = {
     priority : 10,
     show : true,
     author : 'Chion Tang',
-    version : '1.0.0',
+    version : '0.0.2-beta.2',
     reactClass : WeiboPostman
 }
 

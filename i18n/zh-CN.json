@@ -1,7 +1,7 @@
 {
     "pluginDisplayName" : "微博直播",
     "pluginDescription" : "在新浪微博上直播出击战绩和建造出货",
-    "pluginDescriptionUI" : "本插件可将出击战绩和建造出货在你的新浪微博上实时直播。",
+    "pluginDescriptionUI" : "本插件可在你的新浪微博上实时直播出击战绩和建造出货。",
     "hintLoginWeibo" : "请先登录你的微博账号。",
     "postBattleResult" : "直播出击战绩",
     "postMidwayResult" : "直播道中战绩（如不勾选，只直播BOSS点的结果）",

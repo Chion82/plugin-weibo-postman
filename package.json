@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-weibo-postman",
-  "version": "0.0.2-beta.1",
+  "version": "0.0.2-beta.2",
   "description": "poi plugin to post realtime sortie and construction data on Sina Weibo.",
   "main": "index.es",
   "scripts": {
