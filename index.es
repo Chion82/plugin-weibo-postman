@@ -36,8 +36,8 @@ class WeiboPostman extends React.Component {
         };
     }
 
-	render() {
-		return (
+    render() {
+        return (
             <div style={{padding: '10px'}}>
                 {__('pluginDescriptionUI')}<br />
                 <span id="weibo-postman_hint">
@@ -76,13 +76,13 @@ class WeiboPostman extends React.Component {
                     <Button bsStyle="primary" onClick={this.saveConfig.bind(this)}>{__('save')}</Button>
                 </div>
             </div>
-		);
-	}
+        );
+    }
 
-	componentDidMount() {
+    componentDidMount() {
         window.addEventListener('battle.result', this.handleBattleResultResponse.bind(this));
-		window.addEventListener('game.response', this.handleResponse.bind(this));
-	}
+        window.addEventListener('game.response', this.handleResponse.bind(this));
+    }
 
     componentWillMount() {
         this.getConfigFromFile();
@@ -137,125 +137,125 @@ class WeiboPostman extends React.Component {
         window.success(__('sentWeibo') + text);
     }
 
-	handleBattleResultResponse(e) {
-		//出击结果
-		if (!this.state.postBattleResult) {
+    handleBattleResultResponse(e) {
+        //出击结果
+        if (!this.state.postBattleResult) {
             return;
         }
-		let {map, quest, boss, mapCell, rank, deckHp, deckShipId, enemy, dropItem, dropShipId, combined, mvp} = e.detail;
-		let selectedRank = "";
-		switch (mapLv[map]) {
+        let {map, quest, boss, mapCell, rank, deckHp, deckShipId, enemy, dropItem, dropShipId, combined, mvp} = e.detail;
+        let selectedRank = "";
+        switch (mapLv[map]) {
             case 1:
                 selectedRank = __('eventRankEasy');
-				break;
+                break;
             case 2:
                 selectedRank = __('eventRankMedium');
-				break;
+                break;
             case 3:
                 selectedRank = __('eventRankHard');
-				break;
-		}
-		let beforeHp = deckShipId.map((id) => {
+                break;
+        }
+        let beforeHp = deckShipId.map((id) => {
         if (id !== -1)
             return window._ships[id].api_nowhp;
         else
             return -1;
-		});
-		let rankStr = '';
-		switch (rank) {
+        });
+        let rankStr = '';
+        switch (rank) {
             case 'S':
                 if (this.judgeIfDemage(deckHp, beforeHp))
                     rankStr = __('rankS');
                 else
-				 	rankStr = __('rankSS');
-			    break;
+                     rankStr = __('rankSS');
+                break;
             case 'A':
                 rankStr = __('rankA');
-				break;
+                break;
             case 'B':
                 rankStr = __('rankB');
-				break;
+                break;
             case 'C':
                 rankStr = __('rankC');
-				break;
+                break;
             case 'D':
                 rankStr = __('rankD');
-				break;
+                break;
             case 'E':
                 rankStr = __('rankE');
-				break;
+                break;
             default:
                 rankStr = `${__('rankUnknown')}${rank}`;
-				break;
-		}
-		let mapStr = `${quest}(${parseInt(map/10)>30?'E':parseInt(map/10)}-${map%10})`;
-		if (boss) {
-			mapStr += __('bossPoint');
-		} else {
-			mapStr += __('midwayPoint');
+                break;
+        }
+        let mapStr = `${quest}(${parseInt(map/10)>30?'E':parseInt(map/10)}-${map%10})`;
+        if (boss) {
+            mapStr += __('bossPoint');
+        } else {
+            mapStr += __('midwayPoint');
             if (!this.state.postMidwayResult) {
                 return;
             }
-		}
-		let shipNameArray = [];
-		for (let shipId of deckShipId) {
-			if (shipId === -1)
-				continue;
-			shipNameArray.push(window._ships[shipId].api_name + 'Lv.' + window._ships[shipId].api_lv);
-		}
-		let shipStr = shipNameArray.join(', ')
-		let mvpStr = window._ships[deckShipId[mvp[0]]].api_name;
-		let dropShipStr = __('none');
-		if (dropShipId !== -1) {
-			dropShipStr = window.$ships[dropShipId].api_name;
-		}
-		let resultStr = `${mapStr} ${selectedRank} ${rankStr} ${__('drop')}${dropShipStr} ${__('fleet')}${shipStr} MVP:${mvpStr} `;
-		this.postWeibo(resultStr);
-	}
+        }
+        let shipNameArray = [];
+        for (let shipId of deckShipId) {
+            if (shipId === -1)
+                continue;
+            shipNameArray.push(window._ships[shipId].api_name + 'Lv.' + window._ships[shipId].api_lv);
+        }
+        let shipStr = shipNameArray.join(', ')
+        let mvpStr = window._ships[deckShipId[mvp[0]]].api_name;
+        let dropShipStr = __('none');
+        if (dropShipId !== -1) {
+            dropShipStr = window.$ships[dropShipId].api_name;
+        }
+        let resultStr = `${mapStr} ${selectedRank} ${rankStr} ${__('drop')}${dropShipStr} ${__('fleet')}${shipStr} MVP:${mvpStr} `;
+        this.postWeibo(resultStr);
+    }
 
-	handleResponse(e) {
-		let {body, postBody} = e.detail;
+    handleResponse(e) {
+        let {body, postBody} = e.detail;
 
-		switch (e.detail.path) {
-			//活动海域等级（甲鱼、咸鱼）
-			case '/kcsapi/api_get_member/mapinfo':
-				for (let map of body) {
-					mapLv[map.api_id] = 0;
-					if (map.api_eventmap)
+        switch (e.detail.path) {
+            //活动海域等级（甲鱼、咸鱼）
+            case '/kcsapi/api_get_member/mapinfo':
+                for (let map of body) {
+                    mapLv[map.api_id] = 0;
+                    if (map.api_eventmap)
                         mapLv[map.api_id] = map.api_eventmap.api_selected_rank;
-				}
-				//console.log(mapLv);
-				break;
-			//建造
-			case '/kcsapi/api_req_kousyou/createship':
-				if (body.api_result === 1) {
+                }
+                //console.log(mapLv);
+                break;
+            //建造
+            case '/kcsapi/api_req_kousyou/createship':
+                if (body.api_result === 1) {
                     let state = {
-					    largeFlag : (postBody.api_large_flag === "1"),
-					    kdockId : parseInt(postBody.api_kdock_id),
-					    material : [parseInt(postBody.api_item1), parseInt(postBody.api_item2), parseInt(postBody.api_item3), parseInt(postBody.api_item4), parseInt(postBody.api_item5)],
-					    createShipFlag : true
+                        largeFlag : (postBody.api_large_flag === "1"),
+                        kdockId : parseInt(postBody.api_kdock_id),
+                        material : [parseInt(postBody.api_item1), parseInt(postBody.api_item2), parseInt(postBody.api_item3), parseInt(postBody.api_item4), parseInt(postBody.api_item5)],
+                        createShipFlag : true
                     }
                     this.setState(state);
-				}
-				break;
-			case '/kcsapi/api_get_member/kdock':
-				if (!this.state.createShipFlag || !this.state.postConstructResult) {
+                }
+                break;
+            case '/kcsapi/api_get_member/kdock':
+                if (!this.state.createShipFlag || !this.state.postConstructResult) {
                     this.setState({createShipFlag: false});
-					break;
-				}
-				let apiData = body[this.state.kdockId-1];
-				let createType = __('normalConstruct');
-				if (this.state.largeFlag) {
-					createType = __('largeConstruct');
-				}
-				let createdShipName = window.$ships[apiData.api_created_ship_id].api_name;
-				let createdShipType = window.$shipTypes[window.$ships[apiData.api_created_ship_id].api_stype].api_name;
-				this.setState({createShipFlag: false});
-				let resultStr = `${createType} ${__('createdResult')} ${createdShipType} ${createdShipName} ${__('material')} ${__('fuel')}${this.state.material[0]}${__('ammor')}${this.state.material[1]}${__('steel')}${this.state.material[2]}${__('aluminum')}${this.state.material[3]}${__('merchandise')}${this.state.material[4]}`;
-				this.postWeibo(resultStr);
-				break;
-		}
-	}
+                    break;
+                }
+                let apiData = body[this.state.kdockId-1];
+                let createType = __('normalConstruct');
+                if (this.state.largeFlag) {
+                    createType = __('largeConstruct');
+                }
+                let createdShipName = window.$ships[apiData.api_created_ship_id].api_name;
+                let createdShipType = window.$shipTypes[window.$ships[apiData.api_created_ship_id].api_stype].api_name;
+                this.setState({createShipFlag: false});
+                let resultStr = `${createType} ${__('createdResult')} ${createdShipType} ${createdShipName} ${__('material')} ${__('fuel')}${this.state.material[0]}${__('ammor')}${this.state.material[1]}${__('steel')}${this.state.material[2]}${__('aluminum')}${this.state.material[3]}${__('merchandise')}${this.state.material[4]}`;
+                this.postWeibo(resultStr);
+                break;
+        }
+    }
 
 }
 
