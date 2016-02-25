@@ -1,7 +1,7 @@
 {
     "pluginDisplayName" : "Weibo Postman",
     "pluginDescription" : "Post your realtime sortie and construction result on Sina Weibo.",
-    "pluginDescriptionUI" : "Weibo Postman posts your realtime sortie and construction result on Sina Weibo.",
+    "pluginDescriptionUI" : "Weibo Postman posts your realtime sortie and construction data on Sina Weibo.",
     "hintLoginWeibo" : "Please sign in with your Sina account first.",
     "postBattleResult" : "Post sortie result",
     "postMidwayResult" : "Post midway sortie result (If not checked, will only post sortie result on boss point)",
