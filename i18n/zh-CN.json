@@ -9,7 +9,7 @@
     "weiboTextPrefix" : "微博前缀文本：",
     "weiboTextAfter" : "微博后缀文本：",
     "save" : "保存",
-    "defaultTextAfter" : " --发送自poi-plugin-weibo-postman的微博直播",
+    "defaultTextAfter" : " --来自poi的微博直播",
     "saveSuccess" : "保存成功",
     "sentWeibo" : "发送微博：",
     "eventRankEasy" : "难度:丙",

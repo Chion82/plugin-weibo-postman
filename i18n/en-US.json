@@ -9,7 +9,7 @@
     "weiboTextPrefix" : "Weibo text prefix:",
     "weiboTextAfter" : "Weibo text suffix:",
     "save" : "SAVE",
-    "defaultTextAfter" : " --Live report by poi-plugin-weibo-postman",
+    "defaultTextAfter" : " --Live report from poi",
     "saveSuccess" : "Successfully saved",
     "sentWeibo" : "Sent weibo:",
     "eventRankEasy" : "Difficulty:Easy",
