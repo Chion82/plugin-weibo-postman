@@ -6,6 +6,7 @@
     "postBattleResult" : "直播出击战绩",
     "postMidwayResult" : "直播道中战绩（如不勾选，只直播BOSS点的结果）",
     "postConstructResult" : "直播建造出货",
+    "postGetImage": "同时发送一张掉落或建造出货截图",
     "weiboTextPrefix" : "微博前缀文本：",
     "weiboTextAfter" : "微博后缀文本：",
     "save" : "保存",

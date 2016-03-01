@@ -67,8 +67,14 @@ class WeiboPostman extends React.Component {
                                 $('#weibo-postman_post_midway_result').checked = false;
                             }
                         }} />
-                    <Input type="checkbox" id="weibo-postman_post_midway_result" label={__('postMidwayResult')} defaultChecked={this.state.postMidwayResult} />
+                    <Input type="checkbox" id="weibo-postman_post_midway_result" label={__('postMidwayResult')} defaultChecked={this.state.postMidwayResult}
+                        onClick={()=>{
+                            if ($('#weibo-postman_post_midway_result').checked) {
+                                $('#weibo-postman_post_battle_result').checked = true;
+                            }
+                        }} />
                     <Input type="checkbox" id="weibo-postman_post_construct_result" label={__('postConstructResult')} defaultChecked={this.state.postConstructResult} />
+                    <Input type="checkbox" id='weibo-postman_post_get_image' label={__('postGetImage')} defaultChecked={this.state.postGetImage} />
                     {__('weiboTextPrefix')}
                     <Input type="text" id="weibo-postman_text_prefix" defaultValue={this.state.textPrefix} />
                     {__('weiboTextAfter')}
@@ -85,7 +91,7 @@ class WeiboPostman extends React.Component {
     }
 
     componentWillMount() {
-        this.getConfigFromFile();
+        this.getConfig();
     }
 
     judgeIfDemage(nowHp, beforeHp) {
@@ -96,44 +102,60 @@ class WeiboPostman extends React.Component {
         return false;
     }
 
-    getConfigFromFile() {
-        let defaultConfig = {
-            postBattleResult : true,
-            postMidwayResult : false,
-            postConstructResult : true,
-            textPrefix : '',
-            textAfter : __('defaultTextAfter')
+    getConfig() {
+        let configSettings = {
+            postBattleResult : window.config.get('weiboPostman.postBattleResult', true),
+            postMidwayResult : window.config.get('weiboPostman.postMidwayResult', false),
+            postConstructResult : window.config.get('weiboPostman.postConstructResult', true),
+            postGetImage: window.config.get('weiboPostman.postGetImage', true),
+            textPrefix : window.config.get('weiboPostman.textPrefix', ''),
+            textAfter : window.config.get('weiboPostman.textAfter', __('defaultTextAfter'))
         };
-        try {
-            fs.accessSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', fs.R_OK);
-            let configObject = JSON.parse(fs.readFileSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', {encoding:'utf8'}));
-            this.setState(configObject);
-        } catch (err) {
-            fs.writeFileSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', JSON.stringify(defaultConfig));
-            this.setState(defaultConfig);
-        }
+        this.setState(configSettings);
     }
 
     saveConfig() {
-        let configObject = {
+        let configSettings = {
             postBattleResult : $('#weibo-postman_post_battle_result').checked,
             postMidwayResult : $('#weibo-postman_post_midway_result').checked,
             postConstructResult : $('#weibo-postman_post_construct_result').checked,
+            postGetImage : $('#weibo-postman_post_get_image').checked,
             textPrefix : $('#weibo-postman_text_prefix').value,
             textAfter : $('#weibo-postman_text_after').value
         }
-        fs.writeFileSync(window.APPDATA_PATH + '/poi-plugin-weibo-postman-config.json', JSON.stringify(configObject));
-        this.setState(configObject);
+        this.setState(configSettings);
+        window.config.set('weiboPostman.postBattleResult', configSettings.postBattleResult);
+        window.config.set('weiboPostman.postMidwayResult', configSettings.postMidwayResult);
+        window.config.set('weiboPostman.postConstructResult', configSettings.postConstructResult);
+        window.config.set('weiboPostman.postGetImage', configSettings.postGetImage);
+        window.config.set('weiboPostman.textPrefix', configSettings.textPrefix);
+        window.config.set('weiboPostman.textAfter', configSettings.textAfter);
         window.success(__('saveSuccess'));
     }
 
-    postWeibo(text) {
+    cropWeiboText(text) {
+        let byteCount = 0;
+        for (let i=0;i<text.length;i++) {
+            if (/[\x00-\x7F]{1}/.test(text.charAt(i))) {
+                byteCount ++;
+            } else {
+                byteCount += 2;
+            }
+            if (byteCount >= 276) {
+                return text.substr(0, i) + '...';
+            }
+        }
+        return text;
+    }
+
+    postWeibo(text, apiShipId=-1) {
+        if (!this.state.postGetImage) {
+            apiShipId = -1;
+        }
         text = this.state.textPrefix + ' ' + text;
         text += (' ' + this.state.textAfter);
-        if (text.length > 140) {
-            text = text.substr(0, 137) + '...';
-        }
-        $('#weibo-postman_iframe').setAttribute('src', `${server_host}/api/post_weibo?text=${encodeURIComponent(text)}`);
+        text = this.cropWeiboText(text);
+        $('#weibo-postman_iframe').setAttribute('src', `${server_host}/api/post_weibo?text=${encodeURIComponent(text)}&api_ship_id=${encodeURIComponent(apiShipId)}`);
         window.success(__('sentWeibo') + text);
     }
 
@@ -210,7 +232,7 @@ class WeiboPostman extends React.Component {
             dropShipStr = window.$ships[dropShipId].api_name;
         }
         let resultStr = `${mapStr} ${selectedRank} ${rankStr} ${__('drop')}${dropShipStr} ${__('fleet')}${shipStr} MVP:${mvpStr} `;
-        this.postWeibo(resultStr);
+        this.postWeibo(resultStr, dropShipId);
     }
 
     handleResponse(e) {
@@ -252,7 +274,7 @@ class WeiboPostman extends React.Component {
                 let createdShipType = window.$shipTypes[window.$ships[apiData.api_created_ship_id].api_stype].api_name;
                 this.setState({createShipFlag: false});
                 let resultStr = `${createType} ${__('createdResult')} ${createdShipType} ${createdShipName} ${__('material')} ${__('fuel')}${this.state.material[0]}${__('ammor')}${this.state.material[1]}${__('steel')}${this.state.material[2]}${__('aluminum')}${this.state.material[3]}${__('merchandise')}${this.state.material[4]}`;
-                this.postWeibo(resultStr);
+                this.postWeibo(resultStr, apiData.api_created_ship_id);
                 break;
         }
     }
@@ -267,7 +289,7 @@ let pluginInfo = {
     priority : 10,
     show : true,
     author : 'Chion Tang',
-    version : '1.0.0',
+    version : '1.1.0',
     reactClass : WeiboPostman
 }
 

@@ -6,6 +6,7 @@
     "postBattleResult" : "直播出擊戰績",
     "postMidwayResult" : "直播道中戰績（如不勾選，只直播BOSS點的結果）",
     "postConstructResult" : "直播建造出貨",
+    "postGetImage": "同時發送一張掉落或建造出貨截圖",
     "weiboTextPrefix" : "微博前綴文本：",
     "weiboTextAfter" : "微博後綴文本：",
     "save" : "保存",
