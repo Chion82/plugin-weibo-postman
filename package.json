@@ -1,24 +1,97 @@
 {
-  "name": "poi-plugin-weibo-postman",
-  "version": "1.1.0",
-  "description": "poi plugin to post realtime sortie and construction data on Sina Weibo.",
-  "main": "index.es",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "_args": [
+    [
+      {
+        "raw": "poi-plugin-weibo-postman",
+        "scope": null,
+        "escapedName": "poi-plugin-weibo-postman",
+        "name": "poi-plugin-weibo-postman",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/"
+    ]
+  ],
+  "_cnpm_publish_time": 1456847246238,
+  "_from": "poi-plugin-weibo-postman@latest",
+  "_id": "poi-plugin-weibo-postman@1.1.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/poi-plugin-weibo-postman",
+  "_nodeVersion": "5.1.0",
+  "_npmOperationalInternal": {
+    "host": "packages-6-west.internal.npmjs.com",
+    "tmp": "tmp/poi-plugin-weibo-postman-1.1.0.tgz_1456847244486_0.25315525382757187"
   },
-  "author": "Chion Tang <me@chionlab.moe>",
-  "license": "MIT",
+  "_npmUser": {
+    "name": "chion82",
+    "email": "tech@chionlab.moe"
+  },
+  "_npmVersion": "3.3.12",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "poi-plugin-weibo-postman",
+    "scope": null,
+    "escapedName": "poi-plugin-weibo-postman",
+    "name": "poi-plugin-weibo-postman",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "http://registry.npm.taobao.org/poi-plugin-weibo-postman/download/poi-plugin-weibo-postman-1.1.0.tgz",
+  "_shasum": "059cb636e59d1e78a98e96b479f2a4a5024a9141",
+  "_shrinkwrap": null,
+  "_spec": "poi-plugin-weibo-postman",
+  "_where": "/",
+  "author": {
+    "name": "Chion Tang",
+    "email": "me@chionlab.moe"
+  },
+  "bugs": {
+    "url": "https://github.com/Chion82/plugin-weibo-postman/issues"
+  },
+  "poiPlugin": {
+    "title": "pluginDisplayName",
+    "description": "pluginDescription",
+    "icon": "fa/video-camera",
+    "priority": 18
+  },
   "dependencies": {},
   "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "059cb636e59d1e78a98e96b479f2a4a5024a9141",
+    "size": 5344,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/poi-plugin-weibo-postman/download/poi-plugin-weibo-postman-1.1.0.tgz"
+  },
+  "gitHead": "29891708761f4634b95fdcccf111708a2c9b8a35",
+  "homepage": "https://github.com/Chion82/plugin-weibo-postman#readme",
+  "keywords": [
+    "poi"
+  ],
+  "license": "MIT",
+  "main": "index.es",
+  "maintainers": [
+    {
+      "name": "chion82",
+      "email": "tech@chionlab.moe"
+    }
+  ],
+  "name": "poi-plugin-weibo-postman",
+  "optionalDependencies": {},
+  "publish_time": 1456847246238,
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Chion82/plugin-weibo-postman.git"
   },
-  "keywords": [
-    "poi"
-  ],
-  "bugs": {
-    "url": "https://github.com/Chion82/plugin-weibo-postman/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/Chion82/plugin-weibo-postman#readme"
+  "version": "1.1.0"
 }
